@@ -65,6 +65,25 @@ function createpagevalidate()
 	   return true
   
 }
+$(document).ready(function(){
+	$('#submenudiv').hide();
+	$('#submenucontent').hide();
+$("#pagemenu").change(function() {
+      var menuvalue = $(this).val();
+      if(menuvalue=='Yes')
+      $('#submenucontent').show();
+  	  else
+  	  $('#submenucontent').hide();	
+});
+
+$("#checksubmenu").change(function() {
+      var selectvalue = $(this).val();
+      if(selectvalue=='Yes')
+      $('#submenudiv').show();
+  	  else
+  	  $('#submenudiv').hide();	
+});
+});
 </script>
 	<h2>Modify page</h2>
 	<form name='createpage' action='includes/createpage_res.php' method='post' >
@@ -87,7 +106,43 @@ function createpagevalidate()
 		    </select>
 		</td>
 	</tr>
-	<tr><td>Page</td>
+	<td colspan='2'><div id='submenucontent'>
+	  		<?php if($dbmenu=='Yes')
+	  		{
+	  			$website=new Website();
+	  			$submenu=$website->fetchblankpages($websiteid);
+	  		    //print_r($submenu);
+	  			$num=$website->num_rows($submenu);
+	  			if($num>0){
+
+	  			?>
+	  			Want to add submenu ? <select id='checksubmenu' name='checksubmenu'>
+	  								<option value='' selected >Select</option>
+	  								<option value='Yes'>Yes</option>	
+	  								<option value='No'>No</option>
+	  								</select> 
+
+
+	  			<!--<input type='checkbox' id="checksubmenu" name='checksubmenu' value='yes'><br>-->
+	  			<div id='submenudiv'>
+	  				submenu pages <br><br>
+	  			<?php
+	  				while($pages=$website->fetch_assoc($submenu)) {
+	  					echo "<input type='checkbox' name='submenu[]' value='".$pages['page_id']."' >  ".$pages['page_name']." <br>";
+	  					}
+	  				}
+	  				else{
+	  					echo "There are no pages ";
+	  					echo "<a href='javascript:history.back();'>Back</a>";
+	  				} 
+	  			?>
+	  			</div>	
+	  			<?php	
+	  			}
+	  	?>
+	  		</div>
+
+	<tr><td>Page Status</td>
 		<td><select id='pagestatus' name='pagestatus'>
 			<option value='Active'<?php if($dbpagestatus=='Active') echo 'selected';?>>Active</option>
 		    <option value='Inactive' <?php if($dbpagestatus=='Inactive') echo 'selected'; ?>>Inactive</option>		    </select>

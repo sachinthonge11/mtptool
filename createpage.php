@@ -5,12 +5,12 @@ session_start();
 $websiteid=1; //get from the page;
 function getwebsitepages($websiteid)
 {
-	$viewpage= new Website();
-	$res=$viewpage->fetchwebpages($websiteid);
-    $db=new DBConnection();
+	$website= new Website();
+	$res=$website->fetchwebpages($websiteid);
+    
     $pagearr=array();
     $count=0;
-     while($pagerow=$db->fetch_assoc($res)){
+     while($pagerow=$website->fetch_assoc($res)){
             if(empty($pagecontent)) {
                 $pagearr[$count]=$pagerow['page_id'];
                 $count++;
@@ -29,8 +29,7 @@ function getwebsitepages($websiteid)
     	$res=$website->fetchpage($websiteid,$pageid);
     	$db=new DBConnection();   	    
    		$nrow=$db->num_rows($res);
-		$db=new DBConnection();
-	    $pagerow=$db->fetch_assoc($res);
+	    $pagerow=$website->fetch_assoc($res);
 			$pageid=$pagerow['page_id'];
 		 	$pagename=$pagerow['page_name'];
 			$pagecontent=$pagerow['page_content'];
@@ -46,6 +45,27 @@ function getwebsitepages($websiteid)
 <title>Add Page</title>
 <body>
 <script type="text/javascript">
+function check()
+{
+    var a=new Array();
+    a=document.getElementsByName("submenu[]");
+    var checkflag=0;
+    for(i=0;i<a.length;i++){
+        if(a[i].checked){
+           // alert("cheked"+a[i].value);
+            checkflag=1;
+        }
+    }
+    if (checkflag==0){
+        alert('Please select at least one submenu');
+        return false;
+    }
+            
+    document.forms[0].submitted.value='yes';
+    return true;
+}
+
+
 function createpagevalidate(){  
  	String.prototype.trim = function() {
       return this.replace(/^\s+|\s+$/g,"");
@@ -59,13 +79,40 @@ function createpagevalidate(){
 		document.getElementById('pagecontent').focus();
 		return false;
 	}
-	if(menu==""){
-		alert('please select Menu field. ');
-		document.getElementById('pagemenu').focus();
+	if(menu=='Yes'){
+	    smenu=document.getElementById('checksubmenu').value;
+	   	    if(smenu ==''){
+	    	alert('please select submenu option');
+	    	document.getElementById('checksubmenu').focus();
+	    	return false;
+	    }
+	  	if(smenu =='Yes'){
+	  		if(check()){
+	  			return true;
+	  		}
+	  		return false;
+	  	}
+	  	if(smenu == 'No'){
+			return true;
+		}
 		return false;
 	}
-    return true
+	return true;
 }
+</script>
+<script>
+$(document).ready(function(){
+	$('#submenudiv').hide();
+
+$("#checksubmenu").change(function() {
+      var selectvalue = $(this).val();
+      if(selectvalue=='Yes')
+      $('#submenudiv').show();
+  	  else
+  	  $('#submenudiv').hide();	
+});
+
+});
 </script>
 	<h2>Add page</h2>
 	<form name='createpage'  method='post' action='includes/createpage_res.php'>
@@ -80,8 +127,10 @@ function createpagevalidate(){
 	  <tr>
 	  		<td>Page Content</td>
 	  		<td><textarea name='pagecontent' id="pagecontent" cols='16' rows='4'><?php  if(isset($pagecontent)) echo $pagecontent;?></textarea></td>
-	  </tr>	
-	  <tr>
+	  </tr>
+	  <tr>	
+	  		<td colspan='2'><input type='hidden'  id='pagemenu' name='pagemenu' value= "<?php if(!empty($dbmenu)) echo $dbmenu;?>"></td>	  </tr>	
+	  <!--<tr>
 	  		<td>Add as Menu page</td>
 	  		<td><select id='pagemenu' name='pagemenu'>
 	  			<option value="">Select</option>
@@ -89,33 +138,49 @@ function createpagevalidate(){
 	  			<option value='No' <?php if($dbmenu=='No') echo "selected"?>>No </option>
 	  			</select>
 	  		</td>
-	  	</tr>
+	  	</tr>-->
 	  	<tr>
 		  	<td colspan='2'><div id='submenucontent'>
-
-	  	<?php if($dbmenu=='Yes')
+	  		<?php if($dbmenu=='Yes')
 	  		{
-	  			echo "Do you Want to add submenu pages ";
-	  			echo "<input type='radio' name='checksubmenu' value='yes'>YES ";
-	  			echo "<input type='radio' name='checksubmenu' value='no'>No<br>";
 	  			$website=new Website();
-	  			$submenupagesres=$website->fetchblankpages($websiteid);
-	  			$db=new DBConnection();
-	  			$num=$db->num_rows($submenupagesres);
-	  			if($num>0) {
-	  				while($pages=$db->fetch_assoc($submenupagesres)) {
-	  					echo "<input type='checkbox' name='submenu[]' value='$pageid' >".$pages['page_name']." <br>";
+	  			$submenu=$website->fetchblankpages($websiteid);
+	  		    //print_r($submenu);
+	  			$num=$website->num_rows($submenu);
+	  			if($num>0){
+	  			
+
+	  			?>
+	  			Want to add submenu ? <select id='checksubmenu' name='checksubmenu'>
+	  								<option value=''>Select</option>
+	  								<option value='Yes'>Yes</option>	
+	  								<option value='No'>No</option>
+	  								</select> 
+
+
+	  			<!--<input type='checkbox' id="checksubmenu" name='checksubmenu' value='yes'><br>-->
+	  			<div id='submenudiv'>
+	  				submenu pages <br><br>
+	  			 	  				
+	  			 <?php 
+	  				while($pages=$website->fetch_assoc($submenu)) {
+	  					echo "<input type='checkbox' name='submenu[]' value='".$pages['page_id']."' >  ".$pages['page_name']." <br>";
 	  					}
+	  				}
+	  				else{
+	  					echo "There are no pages ";
+	  					echo "<a href='javascript:history.back();'>Back</a>";
+	  				} 
+	  			?>
+	  			</div>	
+	  			<?php	
 	  			}
-	  		
-	  		}
 	  	?>
-	  	
-		  		<div>
+	  		</div>
 		  	</td>
 	  	</tr>
 	  <tr>
-	  		<td colspan='2' align='center'><input type='submit'  name='addcontents' value="add contents " onClick="return createpagevalidate();" ></td>
+	  		<td colspan='1' align='center'><input type='submit'  name='addcontents' value="add contents " onClick="return createpagevalidate();" ></td>
 	  </tr>
 	</table>	
 	</form>

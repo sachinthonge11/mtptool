@@ -15,7 +15,7 @@ include_once('includes/library.php');
                 $pagecontent=$pagerow['page_content'];
                
             }
-    echo "<a href='javascript:history.back()'>BACK</a>";
+    echo "<a href='javascript:history.back();'>BACK</a>";
   ?>
 <!-- BEGIN: Page Content -->
     <title><?php echo $pagename;?></title>

@@ -6,15 +6,15 @@
 
 $websiteid=1; //fetch by 
 
-$viewpage=new Website();
-$res=$viewpage->fetchpage($websiteid,$pageid=0);//  To fetch pages by user_id 
+$website=new Website();
+$res=$website->fetchpage($websiteid,$pageid=0);//  To fetch pages by user_id 
 //echo $res;
-$db=new DBConnection();
+
 if($res>0){	
 		echo "<table id='pages' border='2' cellspacing='2px' cellwidth='5px' >";
 		echo "<tr><th>Sr.No.</th><th>Pages</th><th>Actions</th></tr>";
 		$count=0;
- 		while($pagerow=$db->fetch_assoc($res))
+ 		while($pagerow=$website->fetch_assoc($res))
  		{
  			$count++;
  			//extract($pagerow);

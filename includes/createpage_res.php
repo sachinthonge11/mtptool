@@ -35,19 +35,34 @@ include_once('library.php');
  	   }
 
     if(isset($_POST['addcontents'])){
-        $pageid=Mod_addslashes($_POST['pageid']);
-              $pagecontent=Mod_addslashes(trim($_POST['pagecontent']));
-        $pagemenu=Mod_addslashes($_POST['pagemenu']);
-        $addpage=new Website();
-        $res=$addpage->addpage($pageid,$pagecontent,$pagemenu);
-      if($res>0) {
-          echo "<script>alert('page info is updated successfuly')</script>";
-          echo "<script>window.location='../createpage.php'</script>";
-      }
-      else{
-          echo "<script>alert('page info not updated.');<script>";
-          echo "<script>window.location='../createpage.php'</script>";
-      }
+            $pageid=Mod_addslashes($_POST['pageid']);
+            $pagecontent=Mod_addslashes(trim($_POST['pagecontent']));
+            $pagemenu=Mod_addslashes($_POST['pagemenu']);
+            $website=new Website();
+            $res=$website->addpage($pageid,$pagecontent,$pagemenu);
+            if($res>0) {
+                 if($pagemenu=='Yes'){
+                    $chksubmenu=Mod_addslashes($_POST['checksubmenu']);
+                    if($chksubmenu=='Yes')
+                    {
+                      $submenupages=$_POST['submenu'];
+                      //echo "pageid=".$pageid;
+                     // print_r($submenupages);
+                      $res=$website->addsubmenu($pageid,$submenupages);
+                      if($res>0)
+                      {
+                        echo "submenu pages added successfully";
+                      }
+                    }
+                  }
+
+                echo "<script>alert('page info is updated successfuly')</script>";
+                echo "<script>window.location='../createpage.php'</script>";
+            }
+            else{
+              echo "<script>alert('page info not updated.');<script>";
+              echo "<script>window.location='../createpage.php'</script>";
+            }
 
     }
 ?>

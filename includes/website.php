@@ -1,6 +1,7 @@
 <?php 
 include_once("dbconnect.php");
-class Website
+include_once("dblibrary.php");
+class Website extends DBlibrary
 {
 	var $database = null;
 	function __construct() {
@@ -92,9 +93,20 @@ class Website
 	public function fetchblankpages($websiteid)
 	{
 		$query = "SELECT  page_id,website_id,page_name,page_content,page_status,parent_id,menu,submenu FROM page WHERE website_id = '$websiteid'
-		AND menu='No' and submenu='No' AND (page_content='' OR page_content=NULL) ";
+		AND menu='No' and submenu='No' ";
 		$result_set = $this->database->query($query);
 		return $result_set;
+	}
+	public function addsubmenu($pageid,$submenupages)
+	{
+		foreach($submenupages as $submenu)
+		{
+			$query =" UPDATE page SET menu='No',submenu='Yes',parent_id='$pageid' WHERE page_id='$submenu'";
+			$result_set = $this->database->query($query);
+    	}
+	
+		return $result_set;
+
 	}
 }
 ?>
