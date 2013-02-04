@@ -153,5 +153,5 @@ $("#checksubmenu").change(function() {
 	  <tr><td colspan='2' align='center'><input type='submit'  name='btnmodifypage' value="Modify page " onClick="return createpagevalidate();" ></td></tr>
 	</table>	
 	</form>
-<?php  echo "testing purpose written in file." ?>
+<?php  echo "file." ?>
 <?php  include_once('footer.php');?>
