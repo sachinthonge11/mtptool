@@ -153,7 +153,4 @@ $("#checksubmenu").change(function() {
 	  <tr><td colspan='2' align='center'><input type='submit'  name='btnmodifypage' value="Modify page " onClick="return createpagevalidate();" ></td></tr>
 	</table>	
 	</form>
-		
-
-
 <?php include_once('footer.php');?>
