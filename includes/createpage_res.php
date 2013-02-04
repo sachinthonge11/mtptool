@@ -21,10 +21,25 @@ include_once('library.php');
             $pagemenu=Mod_addslashes($_POST['pagemenu']);
             $pagestatus=Mod_addslashes($_POST['pagestatus']);
 
-         	  $modpage=new Website();
- 			      $modres=$modpage->updatepage($pageid,$pagename,$pagecontent,$pagemenu,$pagestatus);
+         	  $website=new Website();
+ 			      $modres=$website->updatepage($pageid,$pagename,$pagecontent,$pagemenu,$pagestatus);
  			
    			if($modres>0){
+                if($pagemenu=='Yes'){
+                    $chksubmenu=Mod_addslashes($_POST['checksubmenu']);
+                    if($chksubmenu=='Yes')
+                    {
+                      $submenupages=$_POST['submenu'];
+                      //echo "pageid=".$pageid;
+                     // print_r($submenupages);
+                      $res=$website->addsubmenu($pageid,$submenupages);
+                      if($res>0)
+                      {
+                        echo "submenu pages added successfully";
+                      }
+                    }
+                  }
+
          				echo "<script>alert('page info is updated successfuly')</script>";
          				echo "<script>window.location='../viewpages.php'</script>";
    			   }  	

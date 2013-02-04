@@ -67,7 +67,7 @@ function createpagevalidate()
 }
 $(document).ready(function(){
 	$('#submenudiv').hide();
-	$('#submenucontent').hide();
+	
 $("#pagemenu").change(function() {
       var menuvalue = $(this).val();
       if(menuvalue=='Yes')
@@ -76,6 +76,7 @@ $("#pagemenu").change(function() {
   	  $('#submenucontent').hide();	
 });
 
+$('#submenucontent').show();
 $("#checksubmenu").change(function() {
       var selectvalue = $(this).val();
       if(selectvalue=='Yes')
