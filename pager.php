@@ -22,34 +22,28 @@ if(isset($_GET['pageurlid']))
 {
     $pageid=Mod_addslashes($_GET['pageurlid']);
     $websiteid=$_SESSION['websiteid'];
-    $viewpage= new Website();
-
-   /******* fetching website information ***************/
-    $webres= $viewpage->fetchewebsiteinfo($websiteid);
-    $db=new DBConnection();
-    $webrow=$db->fetch_assoc($webres);
-    //print_r($pagerow);
-                $webid=$webrow[website_id];
-                $webname=$webrow[website_name];
-                $webusr=$webrow[user_id];
-                $webkeyword=$webrow[keyword];
-                $websitetitle=$webrow[site_title];
-                $webdescription=$webrow[meta_description];
-
+    $website= new Website();
     /***********for fetching particular page information  *************/
    
-    $res=$viewpage->fetchpage($websiteid,$pageid);
-    $db=new DBConnection();
-    $pagerow=$db->fetch_assoc($res);
+    $res=$website->fetchpage($websiteid,$pageid);
+    $pagerow=$website->fetch_assoc($res);
                 //print_r($pagerow);
-                $pageid=$pagerow[page_id];
-                $pagename=$pagerow[page_name];
-                $pagecontent=$pagerow[page_content];
-               
-            
-    
+    $pageid=$pagerow['page_id'];
+    $pagename=$pagerow['page_name'];
+    $pagecontent=$pagerow['page_content'];    
 }   
 
+   /******* fetching website information ***************/
+    $website= new Website();
+    $webres= $website->fetchewebsiteinfo($websiteid);
+    $webrow=$website->fetch_assoc($webres);
+    //print_r($pagerow);
+            $webid=$webrow['website_id'];
+            $webname=$webrow['website_name'];
+            $webusr=$webrow['user_id'];
+            $webkeyword=$webrow['keyword'];
+            $websitetitle=$webrow['site_title'];
+            $webdescription=$webrow['meta_description'];
 
 $pagearr = $items;
 $limit =1;

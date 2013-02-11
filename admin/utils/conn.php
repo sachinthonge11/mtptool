@@ -46,6 +46,10 @@ class connection{
     {
         return mysql_fetch_array($result);
     }
+     public function fetchassoc($result)
+    {
+        return mysql_fetch_assoc($result);
+    }
     
     
 }

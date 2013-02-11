@@ -10,14 +10,14 @@ if(isset($_GET['pageurlid']))
     $pageid=$_GET['pageurlid'];
     $viewpage=new Page();
     $Type='bypage';
-   if(isset($_GET[pageurlid])) {
+   if(isset($_GET['pageurlid'])) {
     $res=$viewpage->Fetchpageinfo($pageid,$Type);
     $db=new DBConnection();
     $pagerow=$db->fetch_assoc($res);
 
-                $pageid=$pagerow[page_id];
-                $pagename=$pagerow[page_name];
-                $pagecontent=$pagerow[page_content];
+                $pageid=$pagerow['page_id'];
+                $pagename=$pagerow['page_name'];
+                $pagecontent=$pagerow['page_content'];
             }
     
 }   ?>

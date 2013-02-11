@@ -1,0 +1,9 @@
+Options +FollowSymlinks
+RewriteEngine On
+RewriteBase /websachin
+RewriteCond %{REQUEST_FILENAME} !-d 
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule /?^editpage/([0-9]+)$ editpage.php?pageurlid=$1&rew [L]
+
+RewriteCond %{QUERY_STRING} ^pageurlid=([0-9]+)$
+RewriteRule /?^editpage.php$ /websachin/editpage/%1? [R,L]

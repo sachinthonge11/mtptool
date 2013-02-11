@@ -58,16 +58,17 @@ include_once('library.php');
             $website=new Website();
             $res=$website->addpage($pageid,$pagecontent,$pagemenu);
             if($res>0) {
-                 if(($pagemenu=='Yes')&&(!empty($_POST['checksubmenu']))){
-                    if($chksubmenu=='Yes'){
-                        $chksubmenu=Mod_addslashes($_POST['checksubmenu']);
-                        $presubmenu='';
-                        $submenupages=$_POST['submenu'];
-                        $res=$website->addsubmenu($pageid,$submenupages,$presubmenu);
-                        if($res>0)
-                        {
-                         // echo "submenu pages added successfully";
-                        }
+                 if($pagemenu=='Yes'){
+                    $chksubmenu=Mod_addslashes($_POST['checksubmenu']);
+                    if($chksubmenu=='Yes')
+                    {
+                      $presubmenu='';
+                      $submenupages=$_POST['submenu'];
+                      $res=$website->addsubmenu($pageid,$submenupages,$presubmenu);
+                      if($res>0)
+                      {
+                       // echo "submenu pages added successfully";
+                      }
                     }
                   }
 
